@@ -425,14 +425,13 @@
               "script": {
                 "exec": [
                   "pm.test(\"Status code is 201\", function () {",
-                  "    pm.response.to.have.status(201);",
+                  "  pm.response.to.have.status(201);",
                   "});",
                   "",
-                  "pm.test(\"Successful POST request\", function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
-                  "});",
-                  "",
-                  ""
+                  "pm.test(\"Review created message returned\", function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData.message).to.eql(\"Review created!\");",
+                  "});"
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -545,7 +544,7 @@
               }
             ],
             "url": {
-              "raw": "https://warraichkhadijacsc3916hw3-1.onrender.com/reviews/69d2c4c97c5abd3e8852aacd",
+              "raw": "https://warraichkhadijacsc3916hw3-1.onrender.com/reviews/69d2c4e47c5abd3e8852aad0",
               "protocol": "https",
               "host": [
                 "warraichkhadijacsc3916hw3-1",
@@ -554,7 +553,7 @@
               ],
               "path": [
                 "reviews",
-                "69d2c4c97c5abd3e8852aacd"
+                "69d2c4e47c5abd3e8852aad0"
               ]
             }
           },
@@ -605,6 +604,120 @@
         },
         {
           "name": "GetMoviesReviews=true",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "  pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has title\", function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property(\"title\");",
+                  "});",
+                  "",
+                  "pm.test(\"Response has reviews array\", function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property(\"reviews\");",
+                  "  pm.expect(jsonData.reviews).to.be.an(\"array\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://warraichkhadijacsc3916hw3-1.onrender.com/movies/Interstellar?reviews=true",
+              "protocol": "https",
+              "host": [
+                "warraichkhadijacsc3916hw3-1",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "movies",
+                "Interstellar"
+              ],
+              "query": [
+                {
+                  "key": "reviews",
+                  "value": "true"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DifferentReview",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {",
+                  "  pm.response.to.have.status(201);",
+                  "});",
+                  "",
+                  "pm.test(\"Review created message returned\", function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData.message).to.eql(\"Review created!\");",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"movieId\": \"69b79e680d2778b5bfdc2daf\",\n  \"username\": \"khadija1\",\n  \"review\": \"Different review text for final test\",\n  \"rating\": 4\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://warraichkhadijacsc3916hw3-1.onrender.com/reviews",
+              "protocol": "https",
+              "host": [
+                "warraichkhadijacsc3916hw3-1",
+                "onrender",
+                "com"
+              ],
+              "path": [
+                "reviews"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetMoviesReviews=true Copy",
           "event": [
             {
               "listen": "test",
@@ -705,15 +818,14 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "pm.test(\"Status code is 201\", function () {",
-                  "    pm.response.to.have.status(201);",
+                  "pm.test(\"Status code is 400 or 404\", function () {",
+                  "  pm.expect(pm.response.code).to.be.oneOf([400, 404]);",
                   "});",
                   "",
-                  "pm.test(\"Successful POST request\", function () {",
-                  "    pm.expect(pm.response.code).to.be.oneOf([201, 202]);",
-                  "});",
-                  "",
-                  ""
+                  "pm.test(\"Invalid review request returns error message\", function () {",
+                  "  const jsonData = pm.response.json();",
+                  "  pm.expect(jsonData).to.have.property(\"message\");",
+                  "});"
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -732,7 +844,7 @@
             ],
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"movieId\": \"69b805643bc98fe9d8fdf110\",\n  \"username\": \"khadija1\",\n  \"review\": \"Great movie 5/5. scary and fun!\",\n  \"rating\": 5\n}",
+              "raw": "{\n  \"movieId\": \"69b805643bc98fe9d8dscfasdadfdf110\",\n  \"username\": \"khadija1\",\n  \"review\": \"should not generate anything\",\n  \"rating\": 5\n}",
               "options": {
                 "raw": {
                   "language": "json"
